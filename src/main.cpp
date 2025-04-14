@@ -10,6 +10,8 @@
 #include <Attribute_Request.h>
 #include <Espressif_Updater.h>
 
+#define LED_PIN 48
+
 #include "Server_Side_RPC.h"
 //Shared Attributes Configuration
 constexpr uint8_t MAX_ATTRIBUTES = 2U; //
@@ -115,10 +117,10 @@ void processSharedAttributeUpdate(const JsonObjectConst &data) {
 void setup() {
   // Initalize serial connection for debugging
   Serial.begin(SERIAL_DEBUG_BAUD);
-  Wire.begin(11, 12); 
-  dht20.begin();
   delay(1000);
   InitWiFi();
+
+  pinMode(LED_PIN, OUTPUT);
 }
 void processSharedAttributeRequest(const JsonObjectConst &data) {
   //Info
@@ -177,16 +179,10 @@ void loop() {
   }
   if (millis() - previousTelemetrySend > TELEMETRY_SEND_INTERVAL)
   {
-    dht20.read();
-    double temperature = dht20.getTemperature();
-    double humidity = dht20.getHumidity();
-
-    Serial.println("Sending telemetry. Temperature: " + String(temperature, 1) + " humidity: " + String(humidity, 1));
-
-    tb.sendTelemetryData("temperature", temperature);
-    tb.sendTelemetryData("humidity", humidity);
-    tb.sendAttributeData("rssi", WiFi.RSSI()); // also update wifi signal strength
-    previousTelemetrySend = millis();
+    digitalWrite(LED_PIN, HIGH);
+    delay(500);
+    digitalWrite(LED_PIN, LOW);
+    delay(500);
   }
   tb.loop();
 }
