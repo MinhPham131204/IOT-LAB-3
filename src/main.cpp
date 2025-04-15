@@ -29,16 +29,14 @@ constexpr char CURRENT_FIRMWARE_TITLE[] = "ESP32_OTA";
 constexpr char CURRENT_FIRMWARE_VERSION[] = "1.1";
 // Maximum amount of retries we attempt to download each firmware chunck over MQTT
 constexpr uint8_t FIRMWARE_FAILURE_RETRIES = 12U;
-// Size of each firmware chunck downloaded over MQTT,
-// increased packet size, might increase download speed
+
 constexpr uint16_t FIRMWARE_PACKET_SIZE = 4096U;
 
 constexpr char WIFI_SSID[] = "ACLAB";
 constexpr char WIFI_PASSWORD[] = "ACLAB2023";
 constexpr char TOKEN[] = "UPjAHGLnXtOwHomdjTJL";
 constexpr char THINGSBOARD_SERVER[] = "app.coreiot.io";
-constexpr char TEMPERATURE_KEY[] = "temperature";
-constexpr char HUMIDITY_KEY[] = "humidity";
+
 constexpr uint16_t THINGSBOARD_PORT = 1883U;
 constexpr uint16_t MAX_MESSAGE_SEND_SIZE = 512U;
 constexpr uint16_t MAX_MESSAGE_RECEIVE_SIZE = 512U;
@@ -135,8 +133,6 @@ void loop() {
     return;
   }
   if (!tb.connected()) {
-    // Reconnect to the ThingsBoard server,
-    // if a connection was disrupted or has not yet been established
     Serial.printf("Connecting to: (%s) with token (%s)\n", THINGSBOARD_SERVER, TOKEN);
     if (!tb.connect(THINGSBOARD_SERVER, TOKEN, THINGSBOARD_PORT)) {
       Serial.println("Failed to connect");
