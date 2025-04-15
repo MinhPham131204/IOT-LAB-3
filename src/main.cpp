@@ -25,10 +25,8 @@ constexpr int16_t TELEMETRY_SEND_INTERVAL = 5000U;
 uint32_t previousTelemetrySend; 
 constexpr char CURRENT_FIRMWARE_TITLE[] = "ESP32_OTA";
 constexpr char CURRENT_FIRMWARE_VERSION[] = "1.2";
-// Maximum amount of retries we attempt to download each firmware chunck over MQTT
+
 constexpr uint8_t FIRMWARE_FAILURE_RETRIES = 12U;
-// Size of each firmware chunck downloaded over MQTT,
-// increased packet size, might increase download speed
 constexpr uint16_t FIRMWARE_PACKET_SIZE = 4096U;
 
 constexpr char WIFI_SSID[] = "ACLAB";
@@ -131,8 +129,6 @@ void loop() {
     return;
   }
   if (!tb.connected()) {
-    // Reconnect to the ThingsBoard server,
-    // if a connection was disrupted or has not yet been established
     Serial.printf("Connecting to: (%s) with token (%s)\n", THINGSBOARD_SERVER, TOKEN);
     if (!tb.connect(THINGSBOARD_SERVER, TOKEN, THINGSBOARD_PORT)) {
       Serial.println("Failed to connect");
@@ -151,8 +147,7 @@ void loop() {
       Serial.println("Subscribing for shared attribute updates...");
       const Shared_Attribute_Callback<MAX_ATTRIBUTES> callback(&processSharedAttributeUpdate, SHARED_ATTRIBUTES);
       if (!shared_update.Shared_Attributes_Subscribe(callback)) {
-      Serial.println("Failed to subscribe for shared attribute updates");
-      // continue;
+        Serial.println("Failed to subscribe for shared attribute updates");
       }
       Serial.println("Subscribe done");
       shared_update_subscribed = true;
@@ -183,7 +178,7 @@ void loop() {
 
     tb.sendTelemetryData("temperature", temperature);
     tb.sendTelemetryData("humidity", humidity);
-    tb.sendAttributeData("rssi", WiFi.RSSI()); // also update wifi signal strength
+    tb.sendAttributeData("rssi", WiFi.RSSI()); 
     previousTelemetrySend = millis();
   }
   tb.loop();
