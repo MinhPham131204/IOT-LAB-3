@@ -27,7 +27,7 @@ constexpr int16_t TELEMETRY_SEND_INTERVAL = 5000U;
 uint32_t previousTelemetrySend; 
 constexpr char CURRENT_FIRMWARE_TITLE[] = "ESP32_OTA";
 constexpr char CURRENT_FIRMWARE_VERSION[] = "1.1";
-// Maximum amount of retries we attempt to download each firmware chunck over MQTT
+
 constexpr uint8_t FIRMWARE_FAILURE_RETRIES = 12U;
 
 constexpr uint16_t FIRMWARE_PACKET_SIZE = 4096U;
